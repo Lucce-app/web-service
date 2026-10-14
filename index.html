@@ -576,7 +576,7 @@ input:focus{outline:none}
             <button type="submit" style="flex:0 0 auto;white-space:nowrap;height:52px;padding:0 6px 0 22px;border:none;border-radius:999px;background:#1F2328;color:#FFFFFF;display:flex;align-items:center;justify-content:center;gap:14px;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;cursor:pointer" style-hover="background:#3E434A" style-active="transform:scale(.97)">{{ joinLabel }}<span style="width:40px;height:40px;border-radius:50%;background:#FFFFFF;color:#1F2328;display:flex;align-items:center;justify-content:center"><i class="ph-light ph-arrow-right" style="font-size:17px"></i></span></button>
           </form>
           <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Geist',sans-serif;font-size:13px;color:#A23E33;padding-left:24px;margin-top:-16px">{{ errorText }}</div></sc-if>
-          <div style="font-family:'Geist',sans-serif;font-size:13px;color:#62676E;padding-left:24px;margin-top:-12px">Te escribimos solo cuando abramos. Sin spam. Al unirte confirmas que eres mayor de edad y aceptas la <a href="privacidad.html" style="color:#62676E;text-decoration:underline;text-underline-offset:2px">política de privacidad</a>.</div>
+          <div style="font-family:'Geist',sans-serif;font-size:13px;color:#62676E;padding-left:24px;margin-top:-12px">Te escribimos solo cuando abramos. Sin spam. Al unirte confirmas que eres mayor de edad y aceptas la <a href="privacidad" style="color:#62676E;text-decoration:underline;text-underline-offset:2px">política de privacidad</a>.</div>
         </sc-if>
         <sc-if value="{{ joined }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;align-items:center;gap:14px;max-width:480px;padding:14px 22px 14px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid #FFFFFF">
@@ -770,7 +770,7 @@ input:focus{outline:none}
             <button type="submit" style="flex:0 0 auto;white-space:nowrap;height:52px;padding:0 26px;border:none;border-radius:999px;background:#1F2328;color:#FFFFFF;font-family:'Geist',sans-serif;font-size:15px;font-weight:500;cursor:pointer" style-hover="background:#3E434A" style-active="transform:scale(.97)">{{ joinLabelShort }}</button>
           </form>
           <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}"><div style="position:relative;font-family:'Geist',sans-serif;font-size:13px;color:#A23E33">{{ errorText }}</div></sc-if>
-          <div style="position:relative;max-width:480px;font-family:'Geist',sans-serif;font-size:13px;line-height:1.5;color:#62676E">Al unirte confirmas que eres mayor de edad y aceptas la <a href="privacidad.html" style="color:#62676E;text-decoration:underline;text-underline-offset:2px">política de privacidad</a>.</div>
+          <div style="position:relative;max-width:480px;font-family:'Geist',sans-serif;font-size:13px;line-height:1.5;color:#62676E">Al unirte confirmas que eres mayor de edad y aceptas la <a href="privacidad" style="color:#62676E;text-decoration:underline;text-underline-offset:2px">política de privacidad</a>.</div>
         </sc-if>
         <sc-if value="{{ joined }}" hint-placeholder-val="{{ false }}">
           <div style="position:relative;display:flex;align-items:center;gap:12px;padding:12px 22px 12px 12px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid #FFFFFF;font-family:'Geist',sans-serif;font-size:15px;font-weight:500"><span style="width:36px;height:36px;border-radius:50%;background:#1F2328;color:#FFFFFF;display:flex;align-items:center;justify-content:center"><i class="ph-light ph-check" style="font-size:17px"></i></span>Estás en la lista</div>
@@ -792,7 +792,11 @@ input:focus{outline:none}
       <div style="display:flex;flex-wrap:wrap;gap:8px 24px;font-family:'Geist',sans-serif;font-size:14px">
         <a href="https://www.instagram.com/lucce.app/" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://www.tiktok.com/@lucce.app" target="_blank" rel="noopener noreferrer">TikTok</a>
-        <a href="privacidad.html" style="color:#62676E">Privacidad</a>
+        <a href="privacidad" style="color:#62676E">Privacidad del sitio</a>
+        <a href="app-privacidad" style="color:#62676E">Privacidad de la app</a>
+        <a href="app-terminos" style="color:#62676E">Términos de la app</a>
+        <a href="app-autorizacion" style="color:#62676E">Tratamiento de datos</a>
+        <a href="soporte" style="color:#62676E">Soporte</a>
       </div>
     </div>
   </footer>
