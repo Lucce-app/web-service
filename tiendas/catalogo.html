@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo para tiendas · Lucce</title>
+<meta name="description" content="Cómo conectar el catálogo de tu tienda con Lucce si no usas Shopify: el formato del archivo, la seguridad y los pasos.">
+<meta name="robots" content="noindex, follow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body{margin:0;background:#F2F1EE;color:#1F2328;font-family:'Geist',system-ui,sans-serif;font-size:16px;line-height:1.65}
+  main{max-width:720px;margin:0 auto;padding:40px 24px 64px}
+  a{color:#1F2328;text-decoration:underline;text-underline-offset:3px}
+  a:hover{color:#62676E}
+  .brand{font-family:'Newsreader',serif;font-size:24px;text-decoration:none}
+  h1{font-family:'Newsreader',serif;font-weight:400;font-size:44px;line-height:1.05;letter-spacing:-.01em;margin:40px 0 12px;text-wrap:balance}
+  h2{font-family:'Newsreader',serif;font-weight:400;font-size:28px;line-height:1.15;margin:48px 0 12px;text-wrap:balance}
+  h3{font-size:16px;font-weight:600;margin:24px 0 4px}
+  p,li{color:#3E434A;text-wrap:pretty}
+  .lead{margin:0 0 20px}
+  .label{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#62676E}
+  .card{background:rgba(255,255,255,.6);border:1px solid #FFFFFF;border-radius:24px;padding:18px 20px;margin:16px 0}
+  .card p{margin:4px 0 0}
+  ol,ul{padding-left:22px;margin:8px 0 0}
+  li{margin:6px 0}
+  code{font-family:'Geist Mono',monospace;font-size:.88em;background:rgba(255,255,255,.7);border:1px solid #E0DDD6;border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+  pre{font-family:'Geist Mono',monospace;font-size:13px;line-height:1.55;background:#1F2328;color:#F2F1EE;border-radius:16px;padding:18px 20px;overflow-x:auto;margin:12px 0}
+  pre code{background:none;border:0;padding:0;font-size:inherit;color:inherit}
+  .table{overflow-x:auto;margin:12px 0}
+  table{border-collapse:collapse;width:100%;font-size:15px;min-width:560px}
+  th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid #E0DDD6}
+  th{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#62676E;font-weight:500}
+  td{color:#3E434A}
+  td:first-child{white-space:nowrap}
+  .req{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#1F2328}
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid #E0DDD6;font-size:14px;color:#62676E;display:flex;flex-wrap:wrap;gap:6px 14px}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="/">Lucce</a>
+
+  <p class="label" style="margin:40px 0 0">Para tiendas · Formato versión 1</p>
+  <h1 style="margin-top:8px">Conecta tu catálogo con Lucce</h1>
+  <p class="lead">Si tu tienda en línea no usa Shopify, publica tu catálogo en una dirección web con el formato de esta página. Lucce lo lee cuando se lo pides desde tu panel y pone al día tus prendas, precios y tallas. No tienes que diseñar una integración: solo generar este archivo.</p>
+
+  <div class="card">
+    <span class="label">En resumen</span>
+    <ul>
+      <li>Una dirección <strong>HTTPS</strong> que responde con tu catálogo en <strong>JSON</strong>.</li>
+      <li>Protegida con una <strong>clave</strong> que solo conocen tu tienda y Lucce.</li>
+      <li>Lucce la <strong>lee</strong>; tu tienda no tiene que enviarnos nada ni recibir llamadas nuestras en otra parte.</li>
+      <li>Solo productos: <strong>ningún dato de tus clientes</strong>.</li>
+    </ul>
+  </div>
+
+  <h2>1. Cómo funciona</h2>
+  <ol>
+    <li>Tu tienda publica el catálogo en una dirección, por ejemplo <code>https://tutienda.com/lucce/catalogo.json</code>.</li>
+    <li>Cuando tocas <strong>«Traer de mi tienda»</strong> en tu panel de Lucce (hasta una vez por hora), Lucce lee la dirección. Si un producto cambió de precio o de tallas, Lucce lo actualiza.</li>
+    <li>Las prendas nuevas entran como <strong>borrador</strong>. Las revisas en tu panel de Lucce y, cuando el equipo de Lucce las aprueba, aparecen en la app.</li>
+    <li>Si un producto deja de estar en el archivo, o se agota en todas sus tallas, Lucce lo oculta. Vuelve a aparecer si regresa.</li>
+  </ol>
+
+  <h2>2. Seguridad</h2>
+  <ul>
+    <li><strong>Solo HTTPS</strong>, con TLS 1.2 o superior y un certificado válido (por ejemplo, de Let's Encrypt). Lucce no lee direcciones <code>http://</code>.</li>
+    <li><strong>Una clave en la cabecera</strong> de cada consulta: <code>Authorization: Bearer &lt;clave&gt;</code>. Tu tienda la genera: larga y al azar, de al menos 32 caracteres. Responde <code>401</code> si falta o no coincide.</li>
+    <li><strong>Compártenos la clave por un enlace de un solo uso</strong> (por ejemplo, 1Password o Bitwarden Send), nunca por correo ni por WhatsApp. La dirección del catálogo sí puede ir por correo.</li>
+    <li><strong>Rotación:</strong> si necesitas cambiar la clave, acepta la vieja y la nueva durante unos días mientras nos la compartes.</li>
+    <li>Lucce identifica sus consultas con el agente <code>Lucce catalog import</code>.</li>
+  </ul>
+
+  <h2>3. El formato</h2>
+  <p>Un objeto JSON con la versión del formato, la fecha del archivo y la lista de productos:</p>
+<pre><code>{
+  "version": 1,
+  "updated_at": "2026-11-05T14:30:00-05:00",
+  "items": [
+    {
+      "id": "BL-2045",
+      "title": "Blusa de lino manga corta",
+      "description": "Lino 100 %, corte recto.",
+      "link": "https://tutienda.com/productos/blusa-lino",
+      "image_link": "https://tutienda.com/fotos/bl-2045-frente.jpg",
+      "product_type": "top",
+      "gender": "female",
+      "price": 129900,
+      "sale_price": 99900,
+      "color": "Beige",
+      "sizes": [
+        { "size": "S", "available": true },
+        { "size": "M", "available": true },
+        { "size": "L", "available": false }
+      ],
+      "updated_at": "2026-11-04T09:12:00-05:00"
+    }
+  ]
+}</code></pre>
+
+  <h3>Campos de cada producto</h3>
+  <div class="table">
+  <table>
+    <thead><tr><th>Campo</th><th>Qué es</th><th>Reglas</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code> <span class="req">obligatorio</span></td><td>El identificador del producto en tu tienda.</td><td>Texto, hasta 100 caracteres. <strong>No debe cambiar nunca</strong>: con él Lucce sabe que es el mismo producto.</td></tr>
+      <tr><td><code>title</code> <span class="req">obligatorio</span></td><td>El nombre que ve la persona.</td><td>Hasta 150 caracteres, sin códigos internos.</td></tr>
+      <tr><td><code>link</code> <span class="req">obligatorio</span></td><td>La página del producto en tu tienda, donde se compra.</td><td>URL <code>https://</code>.</td></tr>
+      <tr><td><code>image_link</code> <span class="req">obligatorio</span></td><td>La foto principal.</td><td>URL <code>https://</code> pública, JPEG, PNG o WebP, de al menos 800 px por lado y hasta 10 MB. Ver «Fotos».</td></tr>
+      <tr><td><code>product_type</code> <span class="req">obligatorio</span></td><td>La categoría en Lucce.</td><td>Uno de los valores de la tabla «Categorías». Lo que no esté en ella no entra.</td></tr>
+      <tr><td><code>price</code> <span class="req">obligatorio</span></td><td>Precio normal.</td><td>Número entero en pesos colombianos, con IVA, sin puntos ni símbolo: <code>129900</code>.</td></tr>
+      <tr><td><code>sizes</code> <span class="req">obligatorio</span></td><td>Las tallas y si hay existencias.</td><td>Lista de <code>{"size", "available"}</code>, en el orden de tu tienda. Para productos sin talla, una sola: <code>[{"size": "Única", "available": true}]</code>.</td></tr>
+      <tr><td><code>description</code></td><td>Descripción del producto.</td><td>Texto plano, sin HTML, hasta 2.000 caracteres. Material y corte ayudan a recomendarlo bien.</td></tr>
+      <tr><td><code>gender</code></td><td>Para quién es.</td><td><code>female</code>, <code>male</code> o <code>unisex</code>.</td></tr>
+      <tr><td><code>sale_price</code></td><td>Precio de oferta.</td><td>Igual que <code>price</code> y menor que él. Si lo envías, Lucce muestra este.</td></tr>
+      <tr><td><code>color</code></td><td>El color principal.</td><td>Texto, por ejemplo <code>Beige</code>.</td></tr>
+      <tr><td><code>updated_at</code></td><td>Última vez que cambió el producto.</td><td>Fecha ISO 8601 con zona horaria.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Los campos que Lucce no conoce se ignoran, así que puedes enviar otros sin problema. Los nombres de los campos son los mismos del feed de productos de Google Shopping: si ya tienes uno, te sirve de base.</p>
+
+  <h3>Categorías</h3>
+  <div class="table">
+  <table>
+    <thead><tr><th>Valor</th><th>Incluye</th></tr></thead>
+    <tbody>
+      <tr><td><code>top</code></td><td>Blusas, camisas, camisetas, tops, bodies.</td></tr>
+      <tr><td><code>bottom</code></td><td>Pantalones, jeans, faldas, shorts, bermudas.</td></tr>
+      <tr><td><code>dress</code></td><td>Vestidos y enterizos.</td></tr>
+      <tr><td><code>set</code></td><td>Conjuntos de dos piezas que se venden juntos.</td></tr>
+      <tr><td><code>outerwear</code></td><td>Chaquetas, abrigos, buzos, blazers.</td></tr>
+      <tr><td><code>shoes</code></td><td>Zapatos, tenis, sandalias, botas.</td></tr>
+      <tr><td><code>accessory</code></td><td>Bolsos, gorras, cinturones.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Ropa interior, fragancias, bonos de regalo y otros productos que no son prendas no se incluyen.</p>
+
+  <h3>Fotos</h3>
+  <p>Con la foto principal, la persona se prueba la prenda en su avatar. Por eso:</p>
+  <ul>
+    <li>Una sola prenda, completa y de frente.</li>
+    <li>Fondo liso y claro; sin textos, logos encima ni marcos.</li>
+    <li>Mejor sin modelo o con la prenda bien visible; evita fotos de detalle o de espalda como principal.</li>
+  </ul>
+  <p>Lucce descarga la foto y la guarda, así que debe responder sin clave. Si la foto cambia, cambia también su URL.</p>
+
+  <h3>Muchos productos</h3>
+  <p>Hasta 5.000 productos pueden ir en un solo archivo. Si tienes más, o si generarlo tarda, divídelo en páginas: cada respuesta trae en <code>next</code> la URL de la siguiente, y la última no lo trae.</p>
+<pre><code>{ "version": 1, "items": [ … ], "next": "https://tutienda.com/lucce/catalogo.json?page=2" }</code></pre>
+  <p>Cada respuesta debe tardar menos de 30 segundos.</p>
+
+  <h2>4. Paso a paso</h2>
+  <ol>
+    <li><strong>Prepara la dirección</strong> con el formato de esta página y la clave. Si puedes, primero con unos pocos productos de prueba.</li>
+    <li><strong>Revísala tú mismo:</strong> sin la clave debe responder <code>401</code>; con ella, el JSON:
+<pre><code>curl -H "Authorization: Bearer TU_CLAVE" https://tutienda.com/lucce/catalogo.json</code></pre></li>
+    <li><strong>Envíanos</strong> la dirección a <a href="mailto:lucceapp@gmail.com">lucceapp@gmail.com</a>, y la clave por un enlace de un solo uso.</li>
+    <li><strong>Hacemos una primera lectura de prueba</strong> y te contamos qué productos entraron y cuáles no, y por qué.</li>
+    <li><strong>Revisas tus prendas en borrador</strong> en tu panel de Lucce y las envías a revisión.</li>
+    <li><strong>Lucce las aprueba</strong> y aparecen en la app. Cuando cambies precios, tallas o productos, toca «Traer de mi tienda» para ponerlos al día.</li>
+  </ol>
+
+  <h2>Preguntas frecuentes</h2>
+  <h3>¿Tengo que enviar avisos cuando algo cambia?</h3>
+  <p>No. Lucce lee el archivo cuando tocas «Traer de mi tienda» en tu panel. Las compras se hacen en tu tienda, que siempre muestra tus existencias reales.</p>
+  <h3>¿Puede ser un archivo fijo en vez de una API?</h3>
+  <p>Sí. Puede ser un archivo que tu sistema genera cada cierto tiempo y publica en esa dirección, siempre que esté protegido con la clave y al día.</p>
+  <h3>¿Y si mi tienda usa Shopify?</h3>
+  <p>No necesitas nada de esto: Lucce lee el catálogo de Shopify con tu autorización. Escríbenos.</p>
+  <h3>¿Qué datos de mi tienda usa Lucce?</h3>
+  <p>Solo los de tus productos. Nunca pedimos datos de tus clientes ni de tus ventas.</p>
+  <h3>¿Puede cambiar este formato?</h3>
+  <p>Si lo cambiamos, será como una versión nueva (<code>"version": 2</code>), y la versión 1 seguirá funcionando mientras la uses.</p>
+
+  <footer>
+    <span>© 2026 Lucce</span>
+    <a href="/soporte">Soporte</a>
+    <a href="/app-privacidad">Privacidad</a>
+    <a href="/">Inicio</a>
+  </footer>
+</main>
+</body>
+</html>
