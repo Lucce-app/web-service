@@ -116,8 +116,8 @@
       <tr><td><code>product_type</code></td><td><span class="req">Sí</span></td><td>La categoría en Lucce.</td><td>Uno de los valores de la tabla «Categorías». Lo que no esté en ella no entra.</td></tr>
       <tr><td><code>price</code></td><td><span class="req">Sí</span></td><td>Precio normal.</td><td>Número entero en pesos colombianos, con IVA, sin puntos ni símbolo: <code>129900</code>.</td></tr>
       <tr><td><code>sizes</code></td><td>Opcional</td><td>Las tallas y si hay existencias.</td><td>Lista de <code>{"size", "available"}</code>, en el orden de tu tienda. <strong>Si falta:</strong> el producto se muestra disponible y sin tallas.</td></tr>
-      <tr><td><code>description</code></td><td>Opcional</td><td>Descripción del producto.</td><td>Texto plano, sin HTML, hasta 2.000 caracteres. Material y corte ayudan a recomendarlo bien. <strong>Si falta:</strong> solo se muestra el nombre.</td></tr>
-      <tr><td><code>gender</code></td><td>Opcional</td><td>Para quién es.</td><td><code>female</code>, <code>male</code> o <code>unisex</code>. <strong>Si falta:</strong> Lucce lo trata como unisex.</td></tr>
+      <tr><td><code>description</code></td><td>Opcional</td><td>Descripción del producto.</td><td>Texto plano, sin HTML, hasta 2.000 caracteres. Material y corte ayudan a recomendarlo bien. <strong>Si falta:</strong> puedes escribirla al revisar la prenda en tu panel.</td></tr>
+      <tr><td><code>gender</code></td><td>Opcional</td><td>Para quién es.</td><td><code>female</code>, <code>male</code> o <code>unisex</code>. <strong>Si falta:</strong> lo eliges al revisar la prenda en tu panel.</td></tr>
       <tr><td><code>sale_price</code></td><td>Opcional</td><td>Precio de oferta.</td><td>Igual que <code>price</code> y menor que él. <strong>Si falta:</strong> se muestra <code>price</code>.</td></tr>
       <tr><td><code>color</code></td><td>Opcional</td><td>El color principal.</td><td>Texto, por ejemplo <code>Beige</code>.</td></tr>
       <tr><td><code>updated_at</code></td><td>Opcional</td><td>Última vez que cambió el producto.</td><td>Fecha ISO 8601 con zona horaria.</td></tr>
