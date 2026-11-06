@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Catálogo para tiendas · Lucce</title>
-<meta name="description" content="Cómo conectar el catálogo de tu tienda con Lucce si no usas Shopify: el formato del archivo, la seguridad y los pasos.">
+<title>Conecta tu tienda · Lucce</title>
+<meta name="description" content="Cómo conectar tu tienda con Lucce si no usas Shopify: el catálogo, las ventas con Mercado Pago, la seguridad y los pasos.">
 <meta name="robots" content="noindex, follow">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -46,20 +46,20 @@
   <a class="brand" href="/">Lucce</a>
 
   <p class="label" style="margin:40px 0 0">Para tiendas · Formato versión 1</p>
-  <h1 style="margin-top:8px">Conecta tu catálogo con Lucce</h1>
-  <p class="lead">Si tu tienda en línea no usa Shopify, publica tu catálogo en una dirección web con el formato de esta página. Lucce lo lee cuando se lo pides desde tu panel y pone al día tus prendas, precios y tallas. No tienes que diseñar una integración: solo generar este archivo.</p>
+  <h1 style="margin-top:8px">Conecta tu tienda con Lucce</h1>
+  <p class="lead">Si tu tienda en línea no usa Shopify, publica tu catálogo en una dirección web con el formato de esta página. Lucce lo lee cuando se lo pides desde tu panel y pone al día tus prendas, precios y tallas. No tienes que diseñar una integración: solo generar este archivo. Si además vendes desde Lucce, agregas dos direcciones más (sección 4).</p>
 
   <div class="card">
     <span class="label">En resumen</span>
     <ul>
-      <li>Una dirección <strong>HTTPS</strong> que responde con tu catálogo en <strong>JSON</strong>.</li>
-      <li>Protegida con una <strong>clave</strong> que solo conocen tu tienda y Lucce.</li>
-      <li>Lucce la <strong>lee</strong>; tu tienda no tiene que enviarnos nada ni recibir llamadas nuestras en otra parte.</li>
-      <li>Solo productos: <strong>ningún dato de tus clientes</strong>.</li>
+      <li><strong>Catálogo:</strong> una dirección <strong>HTTPS</strong> que responde con tus productos en <strong>JSON</strong>.</li>
+      <li><strong>Si vendes desde Lucce:</strong> una dirección donde Lucce pregunta la disponibilidad antes de cobrar, y otra donde te envía cada pedido pagado.</li>
+      <li>Todas protegidas con la misma <strong>clave</strong>, que solo conocen tu tienda y Lucce.</li>
+      <li><strong>Tu tienda maneja el inventario.</strong> Lucce no guarda existencias ni reserva prendas: pregunta y avisa.</li>
     </ul>
   </div>
 
-  <h2>1. Cómo funciona</h2>
+  <h2>1. Cómo funciona el catálogo</h2>
   <ol>
     <li>Tu tienda publica el catálogo en una dirección, por ejemplo <code>https://tutienda.com/lucce/catalogo.json</code>.</li>
     <li>Cuando tocas <strong>«Traer de mi tienda»</strong> en tu panel de Lucce (hasta una vez por hora), Lucce lee la dirección. Si un producto cambió de precio o de tallas, Lucce lo actualiza.</li>
@@ -70,13 +70,13 @@
   <h2>2. Seguridad</h2>
   <ul>
     <li><strong>Solo HTTPS</strong>, con TLS 1.2 o superior y un certificado válido (por ejemplo, de Let's Encrypt). Lucce no lee direcciones <code>http://</code>.</li>
-    <li><strong>Una clave en la cabecera</strong> de cada consulta: <code>Authorization: Bearer &lt;clave&gt;</code>. Tu tienda la genera: larga y al azar, de al menos 32 caracteres. Responde <code>401</code> si falta o no coincide.</li>
-    <li><strong>Compártenos la clave por un enlace de un solo uso</strong> (por ejemplo, 1Password o Bitwarden Send), nunca por correo ni por WhatsApp. La dirección del catálogo sí puede ir por correo.</li>
+    <li><strong>Una clave en la cabecera</strong> de cada consulta a cualquiera de tus direcciones: <code>Authorization: Bearer &lt;clave&gt;</code>. Tu tienda la genera: larga y al azar, de al menos 32 caracteres. Responde <code>401</code> si falta o no coincide.</li>
+    <li><strong>Compártenos la clave por un enlace de un solo uso</strong> (por ejemplo, 1Password o Bitwarden Send), nunca por correo ni por WhatsApp. Las direcciones sí pueden ir por correo.</li>
     <li><strong>Rotación:</strong> si necesitas cambiar la clave, acepta la vieja y la nueva durante unos días mientras nos la compartes.</li>
-    <li>Lucce identifica sus consultas con el agente <code>Lucce catalog import</code>.</li>
+    <li>Lucce identifica sus consultas con un agente (<code>User-Agent</code>) que empieza por <code>Lucce</code>.</li>
   </ul>
 
-  <h2>3. El formato</h2>
+  <h2>3. El formato del catálogo</h2>
   <p>Un objeto JSON con la versión del formato, la fecha del archivo y la lista de productos:</p>
 <pre><code>{
   "version": 1,
@@ -166,7 +166,81 @@
 <pre><code>{ "version": 1, "items": [ … ], "next": "https://tutienda.com/lucce/catalogo.json?page=2" }</code></pre>
   <p>Cada respuesta debe tardar menos de 30 segundos.</p>
 
-  <h2>4. Paso a paso</h2>
+  <h2>4. Ventas desde Lucce</h2>
+  <p class="label">Opcional · Lo activamos tienda por tienda</p>
+  <p>Con las ventas activadas, la compradora paga en Lucce con <strong>Mercado Pago</strong>, y tu tienda despacha. Tu tienda conecta una vez su cuenta de Mercado Pago con Lucce: <strong>el dinero de cada venta llega a tu cuenta</strong>, con la comisión de Lucce ya descontada.</p>
+
+  <h3>Cómo funciona una venta</h3>
+  <ol>
+    <li>La compradora elige la prenda y la talla en Lucce.</li>
+    <li>Antes de cobrar, Lucce pregunta a tu dirección de <strong>disponibilidad</strong> si hay existencias y a qué precio. Si no hay, no cobra.</li>
+    <li>La compradora paga con Mercado Pago.</li>
+    <li>Con el pago aprobado, Lucce envía el <strong>pedido</strong> a tu dirección de pedidos. Tu tienda descuenta el inventario, factura y despacha.</li>
+    <li>Si justo se agotó, tu tienda lo dice en su respuesta, y Lucce devuelve el dinero completo por Mercado Pago y le avisa a la compradora.</li>
+  </ol>
+
+  <h3>Disponibilidad</h3>
+  <p>Lucce envía un <code>POST</code> con las prendas y tallas que la compradora quiere pagar, por ejemplo a <code>https://tutienda.com/lucce/disponibilidad</code>:</p>
+<pre><code>{
+  "items": [
+    { "id": "BL-2045", "size": "M", "quantity": 1 }
+  ]
+}</code></pre>
+  <p>Tu tienda responde con lo que hay en ese momento:</p>
+<pre><code>{
+  "items": [
+    { "id": "BL-2045", "size": "M", "available": true, "price": 99900 }
+  ]
+}</code></pre>
+  <ul>
+    <li><code>id</code> y <code>size</code> son los mismos de tu catálogo. Si un producto no lleva tallas, <code>size</code> no se envía.</li>
+    <li><code>price</code> es el precio final por unidad, con oferta si la hay. Si cambió, Lucce cobra el tuyo y se lo muestra a la compradora antes de pagar.</li>
+    <li>No hace falta reservar la prenda: solo informar.</li>
+    <li>Responde en menos de 5 segundos. Si no hay respuesta, Lucce no cobra.</li>
+  </ul>
+
+  <h3>Pedidos</h3>
+  <p>Con el pago aprobado, Lucce envía un <code>POST</code> con el pedido, por ejemplo a <code>https://tutienda.com/lucce/pedidos</code>:</p>
+<pre><code>{
+  "order_id": "LC-000123",
+  "created_at": "2026-11-06T15:04:00-05:00",
+  "payment": {
+    "provider": "mercadopago",
+    "payment_id": "1234567890",
+    "status": "approved",
+    "total": 99900
+  },
+  "items": [
+    { "id": "BL-2045", "title": "Blusa de lino manga corta", "size": "M", "quantity": 1, "unit_price": 99900 }
+  ],
+  "shipping": {
+    "name": "Ana Gómez",
+    "email": "ana@ejemplo.com",
+    "phone": "+573001234567",
+    "address": "Calle 10 # 43-20, apto 501",
+    "city": "Medellín",
+    "department": "Antioquia",
+    "notes": "Portería"
+  }
+}</code></pre>
+  <p>Tu tienda responde:</p>
+  <div class="table">
+  <table>
+    <thead><tr><th>Respuesta</th><th>Cuándo</th><th>Qué hace Lucce</th></tr></thead>
+    <tbody>
+      <tr><td><code>200</code> con <code>{"store_order_id": "T-5521"}</code></td><td>Recibiste el pedido y lo vas a despachar.</td><td>Lo marca como recibido y le muestra a la compradora tu número de pedido.</td></tr>
+      <tr><td><code>409</code> con <code>{"reason": "out_of_stock"}</code></td><td>Ya no hay existencias de alguna prenda.</td><td>Devuelve el dinero completo y le avisa a la compradora.</td></tr>
+      <tr><td>Error o sin respuesta</td><td>Tu servidor falló o tardó más de 10 segundos.</td><td>Reintenta con el mismo pedido durante 24 horas, cada vez con más espera. Si no lo logra, nos comunicamos contigo.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul>
+    <li><strong>El mismo pedido puede llegar más de una vez</strong> (por ejemplo, si tu respuesta se perdió). Usa <code>order_id</code> para reconocerlo: si ya lo tienes, responde <code>200</code> con el mismo <code>store_order_id</code> y no descuentes el inventario otra vez.</li>
+    <li>Los datos de envío de la compradora son solo para despachar y facturar ese pedido.</li>
+    <li>El costo y las condiciones de envío, los cambios y las devoluciones los acordamos con cada tienda antes de activar las ventas.</li>
+  </ul>
+
+  <h2>5. Paso a paso</h2>
   <ol>
     <li><strong>Prepara la dirección</strong> con el formato de esta página y la clave. Si puedes, primero con unos pocos productos de prueba.</li>
     <li><strong>Revísala tú mismo:</strong> sin la clave debe responder <code>401</code>; con ella, el JSON:
@@ -176,16 +250,24 @@
     <li><strong>Revisas tus prendas en borrador</strong> en tu panel de Lucce y las envías a revisión.</li>
     <li><strong>Lucce las aprueba</strong> y aparecen en la app. Cuando cambies precios, tallas o productos, toca «Traer de mi tienda» para ponerlos al día.</li>
   </ol>
+  <p>Para activar las ventas, además:</p>
+  <ol>
+    <li><strong>Acordamos</strong> la comisión, el envío, los cambios y las devoluciones.</li>
+    <li><strong>Conectas tu cuenta de Mercado Pago</strong> con Lucce desde el enlace que te enviamos.</li>
+    <li><strong>Preparas las direcciones de disponibilidad y de pedidos</strong>, con la misma clave del catálogo.</li>
+    <li><strong>Hacemos compras de prueba</strong> con el ambiente de pruebas de Mercado Pago: una normal, una agotada y una repetida.</li>
+    <li><strong>Activamos las ventas</strong> de tu tienda.</li>
+  </ol>
 
   <h2>Preguntas frecuentes</h2>
   <h3>¿Tengo que enviar avisos cuando algo cambia?</h3>
-  <p>No. Lucce lee el archivo cuando tocas «Traer de mi tienda» en tu panel. Las compras se hacen en tu tienda, que siempre muestra tus existencias reales.</p>
-  <h3>¿Puede ser un archivo fijo en vez de una API?</h3>
+  <p>No. Lucce lee el catálogo cuando tocas «Traer de mi tienda» en tu panel, y si vendes desde Lucce, pregunta la disponibilidad real justo antes de cobrar.</p>
+  <h3>¿El catálogo puede ser un archivo fijo en vez de una API?</h3>
   <p>Sí. Puede ser un archivo que tu sistema genera cada cierto tiempo y publica en esa dirección, siempre que esté protegido con la clave y al día.</p>
   <h3>¿Y si mi tienda usa Shopify?</h3>
   <p>No necesitas nada de esto: Lucce lee el catálogo de Shopify con tu autorización. Escríbenos.</p>
-  <h3>¿Qué datos de mi tienda usa Lucce?</h3>
-  <p>Solo los de tus productos. Nunca pedimos datos de tus clientes ni de tus ventas.</p>
+  <h3>¿Qué datos intercambiamos?</h3>
+  <p>De tu tienda, Lucce usa solo los datos de tus productos y las respuestas de disponibilidad y pedidos. Nunca pedimos datos de tus clientes ni de tus otras ventas. En cada venta hecha en Lucce, te enviamos los datos de envío de esa compradora.</p>
   <h3>¿Puede cambiar este formato?</h3>
   <p>Si lo cambiamos, será como una versión nueva (<code>"version": 2</code>), y la versión 1 seguirá funcionando mientras la uses.</p>
 
