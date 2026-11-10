@@ -194,10 +194,17 @@
 }</code></pre>
   <ul>
     <li><code>id</code> y <code>size</code> son los mismos de tu catálogo. Si un producto no lleva tallas, <code>size</code> no se envía.</li>
-    <li><code>price</code> es el precio final por unidad, con oferta si la hay. Si cambió, Lucce cobra el tuyo y se lo muestra a la compradora antes de pagar.</li>
+    <li><code>price</code> es el precio final por unidad, con oferta si la hay, en pesos enteros como en el catálogo (<code>99900</code>, sin decimales). Si cambió, Lucce cobra el tuyo y se lo muestra a la compradora antes de pagar.</li>
+    <li><code>available</code> es <code>true</code> solo si tienes la cantidad pedida (<code>quantity</code>) en esa talla. Si no la tienes, o no reconoces el <code>id</code>, responde <code>false</code>.</li>
+    <li>Responde con <code>200</code> y el JSON. Cualquier otra respuesta, o una sin el producto y la talla que se preguntaron, cuenta como «no hay».</li>
     <li>No hace falta reservar la prenda: solo informar.</li>
-    <li>Responde en menos de 5 segundos. Si no hay respuesta, Lucce no cobra.</li>
+    <li>Responde en menos de 5 segundos, contando la respuesta completa. Si no hay respuesta a tiempo, Lucce no cobra.</li>
+    <li><strong>Sin redirecciones:</strong> la dirección tiene que responder directamente. Para proteger tu clave, Lucce no sigue un <code>301</code>, <code>302</code> ni <code>307</code> hacia otra dirección.</li>
   </ul>
+  <p>Para probarla:</p>
+<pre><code>curl -X POST -H "Authorization: Bearer TU_CLAVE" -H "Content-Type: application/json" \
+  -d '{"items": [{"id": "BL-2045", "size": "M", "quantity": 1}]}' \
+  https://tutienda.com/lucce/disponibilidad</code></pre>
 
   <h3>Pedidos</h3>
   <p>Con el pago aprobado, Lucce envía un <code>POST</code> con el pedido, por ejemplo a <code>https://tutienda.com/lucce/pedidos</code>:</p>
@@ -236,6 +243,7 @@
   </div>
   <ul>
     <li><strong>El mismo pedido puede llegar más de una vez</strong> (por ejemplo, si tu respuesta se perdió). Usa <code>order_id</code> para reconocerlo: si ya lo tienes, responde <code>200</code> con el mismo <code>store_order_id</code> y no descuentes el inventario otra vez.</li>
+    <li>Como la de disponibilidad, esta dirección tiene que responder directamente, sin redirecciones.</li>
     <li>Los datos de envío de la compradora son solo para despachar y facturar ese pedido.</li>
     <li>El costo y las condiciones de envío, los cambios y las devoluciones los acordamos con cada tienda antes de activar las ventas.</li>
   </ul>
@@ -254,7 +262,7 @@
   <ol>
     <li><strong>Acordamos</strong> la comisión, el envío, los cambios y las devoluciones.</li>
     <li><strong>Conectas tu cuenta de Mercado Pago</strong> con Lucce desde el enlace que te enviamos.</li>
-    <li><strong>Preparas las direcciones de disponibilidad y de pedidos</strong>, con la misma clave del catálogo.</li>
+    <li><strong>Preparas las direcciones de disponibilidad y de pedidos</strong>, con la misma clave del catálogo, y nos las envías por correo. No hace falta una clave nueva.</li>
     <li><strong>Hacemos compras de prueba</strong> con el ambiente de pruebas de Mercado Pago: una normal, una agotada y una repetida.</li>
     <li><strong>Activamos las ventas</strong> de tu tienda.</li>
   </ol>
